@@ -6,6 +6,7 @@ import Kids from "./pages/Kids";
 import Footwear from "./pages/Footwear";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
+import SubcategoryProducts from "./pages/SubcategoryProducts";
 
 
 function App() {
@@ -14,7 +15,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/men" element={<Men />} />
+        <Route path="/men/:subcategory" element={<SubcategoryProducts category="men" />} />
+
         <Route path="/women" element={<Women />} />
+        <Route path="/women/:subcategory" element={<SubcategoryProducts category="women" />} />
         <Route path="/kids" element={<Kids />} />
         <Route path="/footwear" element={<Footwear />} />
         <Route path="/product/:id" element={<Product />} />

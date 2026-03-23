@@ -105,7 +105,7 @@ const styles = {
     overflow: "hidden",
   },
   heroOverlay: {
-    backgroundColor: "rgba(255,255,255,0.1)",
+    backgroundColor: "rgba(113, 107, 107, 0.8)",
     padding: "60px",
     borderRadius: "30px",
     textAlign: "center",

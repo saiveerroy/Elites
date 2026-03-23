@@ -10,7 +10,7 @@ function SubcategoryProducts({ category }) {
       try {
         // Adjust URL according to your backend API
         const response = await fetch(
-            `http://localhost:3000/products/filter?category=${category}&subcategory=${subcategory}`
+            `http://localhost:3000/filter?category=${category}&subcategory=${subcategory}`
             );
         const data = await response.json();
         setProducts(data);

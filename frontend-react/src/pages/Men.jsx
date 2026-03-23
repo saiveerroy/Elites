@@ -62,7 +62,7 @@ function Men() {
               <li
                 key={name}
                 style={styles.listItem}
-                onClick={() => alert(`Clicked on ${name}`)}
+                onClick={() => handleClick(name)}
               >
                 <img src={image} alt={name} style={styles.image} />
                 <span>{name}</span>
@@ -105,6 +105,7 @@ const styles = {
     height: "100px",
     objectFit: "cover",
     borderRadius: "5px",
+    gap: "10px",
   },
   name:{
     fontstyle: "italic",
