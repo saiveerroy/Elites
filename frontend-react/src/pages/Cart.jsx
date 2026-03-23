@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Navbar from "../components/Navbar";
 
 function Cart() {
   const [cart, setCart] = useState(
@@ -15,18 +16,22 @@ function Cart() {
   }
 
   return (
-    <div>
-      <h2>Your Cart</h2>
+    <>
+      <Navbar />
 
-      {cart.map((item, i) => (
-        <div key={i}>
-          {item.name} - ${item.price}
-          <button onClick={() => removeItem(i)}>❌</button>
-        </div>
-      ))}
+      <div className="cart">
+        <h2>Your Cart</h2>
 
-      <h3>Total: ${total}</h3>
-    </div>
+        {cart.map((item, i) => (
+          <div key={i} className="cart-item">
+            {item.name} - ${item.price}
+            <button onClick={() => removeItem(i)}>❌</button>
+          </div>
+        ))}
+
+        <h3>Total: ${total}</h3>
+      </div>
+    </>
   );
 }
 

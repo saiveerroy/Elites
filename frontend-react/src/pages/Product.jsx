@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
 
 function Product() {
   const { id } = useParams();
@@ -19,14 +20,20 @@ function Product() {
   }
 
   return (
-    <div>
-      <h2>{product.name}</h2>
-      <img src={product.image} width="300" />
-      <p>${product.price}</p>
-      <p>{product.description}</p>
+    <>
+      <Navbar />
 
-      <button onClick={addToCart}>Add to Cart</button>
-    </div>
+      <div className="product-page">
+        <img src={product.image} />
+        <div>
+          <h2>{product.name}</h2>
+          <p className="price">${product.price}</p>
+          <p>{product.description}</p>
+
+          <button onClick={addToCart}>Add to Cart</button>
+        </div>
+      </div>
+    </>
   );
 }
 
