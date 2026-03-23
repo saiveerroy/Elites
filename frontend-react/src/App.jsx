@@ -6,7 +6,7 @@ import Kids from "./pages/Kids";
 import Footwear from "./pages/Footwear";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
-import Category from "./pages/Category";
+
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
         <Route path="/footwear" element={<Footwear />} />
         <Route path="/product/:id" element={<Product />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/category/:name" element={<Category />} />
+        
       </Routes>
     </BrowserRouter>
   );

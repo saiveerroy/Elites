@@ -9,10 +9,10 @@ function Navbar() {
 
       <nav className="nav-container">
         <div style={styles.middle}>
-        <Link to="/category/men">Men</Link>
-        <Link to="/category/women">Women</Link>
-        <Link to="/category/kids">Kids</Link>
-        <Link to="/category/footwear">Footwear</Link>
+        <Link to="/men">Men</Link>
+        <Link to="/women">Women</Link>
+        <Link to="/kids">Kids</Link>
+        <Link to="/footwear">Footwear</Link>
         </div>
         <Link to="/cart">Cart 🛒 ({cart.length})</Link>
       </nav>
