@@ -7,8 +7,13 @@ function Navbar() {
     <header className="navbar">
       <h2 className="logo">Elites</h2>
 
-      <nav>
-        <Link to="/">Home</Link>
+      <nav className="nav-container">
+        <div style={styles.middle}>
+        <Link to="/category/men">Men</Link>
+        <Link to="/category/women">Women</Link>
+        <Link to="/category/kids">Kids</Link>
+        <Link to="/category/footwear">Footwear</Link>
+        </div>
         <Link to="/cart">Cart 🛒 ({cart.length})</Link>
       </nav>
     </header>
@@ -16,3 +21,31 @@ function Navbar() {
 }
 
 export default Navbar;
+
+const styles = {
+  navbar: {
+    display: "flex",
+    alignItems: "center",
+    padding: "10px 20px",
+  },
+
+  logo: {
+    margin: 0,
+  },
+
+  navContainer: {
+    display: "flex",
+    alignItems: "center",
+    flex: 1, // takes full width
+  },
+
+  middle: {
+    display: "flex",
+    gap: "20px",
+    position: "absolute",
+    left: "50%",
+    transform: "translateX(-50%)",
+  }
+  
+
+};
