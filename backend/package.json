@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "cors": "^2.8.6",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.6.1",
     "express": "^5.2.1",
     "mysql": "^2.18.1",
     "mysql2": "^3.20.0"
