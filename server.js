@@ -8,10 +8,11 @@ const app = express();
 app.use(cors());
 
 const db = mysql.createConnection({
-    host: process.env.DB_HOST || "localhost",
-    user: process.env.DB_USER || "root",
-    password: process.env.DB_PASSWORD || "pass123",
-    database: process.env.DB_NAME || "ecommerce"
+    host: process.env.MYSQLHOST || process.env.DB_HOST || "localhost",
+    user: process.env.MYSQLUSER || process.env.DB_USER || "root",
+    password: process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || "pass123",
+    database: process.env.MYSQLDATABASE || process.env.DB_NAME || "ecommerce",
+    port: process.env.MYSQLPORT || 3306
 });
 
 // Get all products
