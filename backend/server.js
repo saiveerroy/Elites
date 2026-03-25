@@ -7,12 +7,37 @@ require("dotenv").config();
 const app = express();
 app.use(cors());
 
-const db = mysql.createConnection({
-    host: process.env.DB_HOST || "localhost",
-    user: process.env.DB_USER || "root",
-    password: process.env.DB_PASSWORD || "pass123",
-    database: process.env.DB_NAME || "ecommerce"
-});
+// Debug: Log environment variables (remove in production)
+console.log("Environment variables:");
+console.log("MYSQLHOST:", process.env.MYSQLHOST);
+console.log("MYSQLUSER:", process.env.MYSQLUSER);
+console.log("MYSQLPASSWORD:", process.env.MYSQLPASSWORD ? "***" : "not set");
+console.log("MYSQLDATABASE:", process.env.MYSQLDATABASE);
+console.log("MYSQLPORT:", process.env.MYSQLPORT);
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
+
+// Parse DATABASE_URL if available (Railway format: mysql://user:pass@host:port/db)
+let dbConfig = {
+    host: process.env.MYSQLHOST || process.env.DB_HOST || "localhost",
+    user: process.env.MYSQLUSER || process.env.DB_USER || "root",
+    password: process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || "pass123",
+    database: process.env.MYSQLDATABASE || process.env.DB_NAME || "ecommerce",
+    port: process.env.MYSQLPORT || 3306
+};
+
+if (process.env.DATABASE_URL) {
+    const url = new URL(process.env.DATABASE_URL);
+    dbConfig = {
+        host: url.hostname,
+        user: url.username,
+        password: url.password,
+        database: url.pathname.substring(1), // Remove leading slash
+        port: url.port
+    };
+    console.log("Using DATABASE_URL for connection");
+}
+
+const db = mysql.createConnection(dbConfig);
 
 // Get all products
 app.get("/products", (req, res) => {
