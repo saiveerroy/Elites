@@ -2,13 +2,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import API from "../config/api";
 
 function Home() {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:3000/products")
+    fetch(API.PRODUCTS)
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);

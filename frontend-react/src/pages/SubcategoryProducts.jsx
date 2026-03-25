@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import API from "../config/api";
 
 function SubcategoryProducts({ category }) {
   const { subcategory } = useParams();
@@ -8,9 +9,8 @@ function SubcategoryProducts({ category }) {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        // Adjust URL according to your backend API
         const response = await fetch(
-            `http://localhost:3000/filter?category=${category}&subcategory=${subcategory}`
+            API.FILTER(category, subcategory)
             );
         const data = await response.json();
         setProducts(data);

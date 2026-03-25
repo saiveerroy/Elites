@@ -1,13 +1,14 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import API from "../config/api";
 
 function Product() {
   const { id } = useParams();
   const [product, setProduct] = useState({});
 
   useEffect(() => {
-    fetch(`http://localhost:3000/product/${id}`)
+    fetch(API.PRODUCT(id))
       .then(res => res.json())
       .then(data => setProduct(data));
   }, [id]);
