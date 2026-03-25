@@ -1,75 +1,60 @@
 //backend/server.js
 const express = require("express");
-const mysql = require("mysql2");
+const { Client } = require('pg');
 const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
 app.use(cors());
 
-// Debug: Log environment variables (remove in production)
-console.log("Environment variables:");
-console.log("MYSQLHOST:", process.env.MYSQLHOST);
-console.log("MYSQLUSER:", process.env.MYSQLUSER);
-console.log("MYSQLPASSWORD:", process.env.MYSQLPASSWORD ? "***" : "not set");
-console.log("MYSQLDATABASE:", process.env.MYSQLDATABASE);
-console.log("MYSQLPORT:", process.env.MYSQLPORT);
-console.log("DATABASE_URL:", process.env.DATABASE_URL);
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
 
-// Parse DATABASE_URL if available (Railway format: mysql://user:pass@host:port/db)
-let dbConfig = {
-    host: process.env.MYSQLHOST || process.env.DB_HOST || "localhost",
-    user: process.env.MYSQLUSER || process.env.DB_USER || "root",
-    password: process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || "pass123",
-    database: process.env.MYSQLDATABASE || process.env.DB_NAME || "ecommerce",
-    port: process.env.MYSQLPORT || 3306
-};
-
-if (process.env.DATABASE_URL) {
-    const url = new URL(process.env.DATABASE_URL);
-    dbConfig = {
-        host: url.hostname,
-        user: url.username,
-        password: url.password,
-        database: url.pathname.substring(1), // Remove leading slash
-        port: url.port
-    };
-    console.log("Using DATABASE_URL for connection");
-}
-
-const db = mysql.createConnection(dbConfig);
+client.connect()
+  .then(() => console.log("Connected to PostgreSQL"))
+  .catch(err => console.error("DB Connection Error:", err));
 
 // Get all products
-app.get("/products", (req, res) => {
-    db.query("SELECT * FROM products", (err, result) => {
-        if(err) throw err;
-        res.json(result);
-    });
+app.get("/products", async (req, res) => {
+    try {
+        const result = await client.query("SELECT * FROM products");
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Database error" });
+    }
 });
 
 // Get single product
-app.get("/product/:id", (req, res) => {
-    db.query("SELECT * FROM products WHERE id=?", [req.params.id], (err, result) => {
-        if(err) throw err;
-        res.json(result[0]);
-    });
+app.get("/product/:id", async (req, res) => {
+    try {
+        const result = await client.query("SELECT * FROM products WHERE id=$1", [req.params.id]);
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Database error" });
+    }
 });
 
-app.get("/filter", (req, res) => {
+app.get("/filter", async (req, res) => {
   const { category, subcategory } = req.query;
 
   if (!category || !subcategory) {
     return res.status(400).json({ error: "Category and subcategory required" });
   }
 
-  const query = "SELECT * FROM products WHERE LOWER(category) = LOWER(?) AND LOWER(subcategory) = LOWER(?)";
-  db.query(query, [category, subcategory], (err, results) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Database error" });
-    }
-    res.json(results);
-  });
+  try {
+    const query = "SELECT * FROM products WHERE LOWER(category) = LOWER($1) AND LOWER(subcategory) = LOWER($2)";
+    const result = await client.query(query, [category, subcategory]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Database error" });
+  }
 });
 
 // Test route
@@ -78,14 +63,5 @@ app.get("/test", (req, res) => {
   res.json({ message: "Server is working" });
 });
 
-db.connect(err => {
-    if(err) {
-        console.error("DB Connection Error:", err);
-        throw err;
-    }
-    console.log("MySQL Connected");
-    console.log("Routes registered");
-
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
